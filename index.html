@@ -1,1 +1,45 @@
-123
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentification Firebase</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; }
+        .auth-forms, .logged-in-content {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        .error-message { color: red; margin-top: 10px; }
+        .success-message { color: green; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+    <h1>Authentification Firebase</h1>
+
+    <div id="authForms" class="auth-forms">
+        <h2>Inscription</h2>
+        <input type="email" id="signupEmail" placeholder="Email" required>
+        <input type="password" id="signupPassword" placeholder="Mot de passe" required>
+        <button id="signupButton">S'inscrire</button>
+        <div id="signupError" class="error-message"></div>
+
+        <h2>Connexion</h2>
+        <input type="email" id="loginEmail" placeholder="Email" required>
+        <input type="password" id="loginPassword" placeholder="Mot de passe" required>
+        <button id="loginButton">Se connecter</button>
+        <div id="loginError" class="error-message"></div>
+    </div>
+
+    <div id="loggedInContent" class="logged-in-content">
+        <h2>Bienvenue <span id="userEmailDisplay"></span> !</h2>
+        <p>Ceci est le contenu visible uniquement par les utilisateurs connectés.</p>
+        <button id="logoutButton">Se déconnecter</button>
+    </div>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>
