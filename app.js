@@ -98,6 +98,8 @@ const authFormsDiv = document.getElementById('authForms');
 const loggedInContentDiv = document.getElementById('loggedInContent');
 const userEmailDisplay = document.getElementById('userEmailDisplay');
 
+let currentUser = null;
+
 onAuthStateChanged(auth, (user) => {
     if (user) {
         console.log("État d'authentification changé: Utilisateur connecté.", user.email);
@@ -119,10 +121,8 @@ onAuthStateChanged(auth, (user) => {
 const messageForm = document.getElementById('message-form');
 const messageInput = document.getElementById('message-input');
 
-let currentUser = null;
-
 messageForm.addEventListener('submit', async (e) => {
-    e.preventDefault(); // real time event
+    e.preventDefault();
 
     if (currentUser) {
         const messageText = messageInput.value.trim();
