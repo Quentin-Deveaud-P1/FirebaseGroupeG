@@ -107,6 +107,7 @@ onAuthStateChanged(auth, (user) => {
 
         currentUser = user
         console.log('Utilisateur connecté:', currentUser.uid);
+        listenForMessages();
     } else {
         console.log("État d'authentification changé: Utilisateur déconnecté.");
         userEmailDisplay.textContent = '';
@@ -147,6 +148,38 @@ messageForm.addEventListener('submit', async (e) => {
     }
 });
 
+const messagesContainer = document.getElementById('messages-container');
+
+function listenForMessages() {
+    const q = query(collection(db, 'messages'), orderBy('timestamp', 'desc'));
+
+    onSnapshot(q, (snapshot) => {
+        messagesContainer.innerHTML = '';
+
+        snapshot.forEach((doc) => {
+            const message = doc.data();
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message');
+
+            let displayTime = '';
+            if (message.timestamp) {
+                if (typeof message.timestamp.toDate === 'function') {
+                    displayTime = message.timestamp.toDate().toLocaleString();
+                } else {
+                    displayTime = new Date(message.timestamp).toLocaleString();
+                }
+            }
+
+            messageElement.innerHTML = `
+        <p><strong>${message.email}</strong> <span class="timestamp">(${displayTime})</span></p>
+        <p>${message.text}</p>
+      `;
+            messagesContainer.appendChild(messageElement);
+        });
+    }, (error) => {
+        console.error("Erreur lors de l'écoute des messages:", error);
+    });
+}
 
 
 
