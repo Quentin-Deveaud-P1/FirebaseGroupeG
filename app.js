@@ -49,7 +49,7 @@ signupButton.addEventListener('click', () => {
                 signupPasswordInput.value = '';
             })
             .catch((error) => {
-                signupErrorDiv.textContent = `Erreur: ${error.message}`;
+                signupErrorDiv.textContent = `Erreur lors de l'inscription : Email ou mot de passe invalide`;
             });
     } else {
         signupErrorDiv.textContent = "Veuillez entrer un email et un mot de passe.";
@@ -75,7 +75,7 @@ loginButton.addEventListener('click', () => {
                 loginPasswordInput.value = '';
             })
             .catch((error) => {
-                loginErrorDiv.textContent = `Erreur: ${error.message}`;
+                loginErrorDiv.textContent = `Erreur lors de l'authentification : identifiant inconnu`;
             });
     } else {
         loginErrorDiv.textContent = "Veuillez entrer un email et un mot de passe.";
@@ -161,15 +161,7 @@ function listenForMessages() {
             const messageElement = document.createElement('div');
             messageElement.classList.add('message');
 
-
-            let displayTime = '';
-            if (message.timestamp) {
-                if (typeof message.timestamp.toDate === 'function') {
-                    displayTime = message.timestamp.toDate().toLocaleString();
-                } else {
-                    displayTime = new Date(message.timestamp).toLocaleString();
-                }
-            }
+            let displayTime = message.timestamp.toDate().toLocaleString();
 
             messageElement.innerHTML = `
         <p><strong>${message.email}</strong> <span class="timestamp">(${displayTime})</span></p>
