@@ -6,6 +6,15 @@ import {
     signOut, 
     onAuthStateChanged 
 } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+import {
+    getFirestore,
+    collection,
+    query,
+    orderBy,
+    onSnapshot,
+    addDoc,
+    serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCIWtVqp0nDe3dMTJmfXTo-2FAtb0RvDHE",
@@ -19,6 +28,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
 
 const signupEmailInput = document.getElementById('signupEmail');
 const signupPasswordInput = document.getElementById('signupPassword');
@@ -35,6 +45,8 @@ signupButton.addEventListener('click', () => {
             .then((userCredential) => {
                 const user = userCredential.user;
                 console.log("Utilisateur inscrit avec succès:", user.email);
+                signupEmailInput.value = '';
+                signupPasswordInput.value = '';
             })
             .catch((error) => {
                 signupErrorDiv.textContent = `Erreur: ${error.message}`;
@@ -59,6 +71,8 @@ loginButton.addEventListener('click', () => {
             .then((userCredential) => {
                 const user = userCredential.user;
                 console.log("Utilisateur connecté avec succès:", user.email);
+                loginEmailInput.value = '';
+                loginPasswordInput.value = '';
             })
             .catch((error) => {
                 loginErrorDiv.textContent = `Erreur: ${error.message}`;
@@ -89,7 +103,10 @@ onAuthStateChanged(auth, (user) => {
         console.log("État d'authentification changé: Utilisateur connecté.", user.email);
         userEmailDisplay.textContent = user.email;
         authFormsDiv.style.display = 'none';
-        loggedInContentDiv.style.display = 'block'; 
+        loggedInContentDiv.style.display = 'block';
+
+        currentUser = user
+        console.log('Utilisateur connecté:', currentUser.uid);
     } else {
         console.log("État d'authentification changé: Utilisateur déconnecté.");
         userEmailDisplay.textContent = '';
@@ -97,4 +114,40 @@ onAuthStateChanged(auth, (user) => {
         loggedInContentDiv.style.display = 'none';
     }
 });
+
+const messageForm = document.getElementById('message-form');
+const messageInput = document.getElementById('message-input');
+
+let currentUser = null;
+
+messageForm.addEventListener('submit', async (e) => {
+    e.preventDefault(); // real time event
+
+    if (currentUser) {
+        const messageText = messageInput.value.trim();
+
+        if (messageText) {
+            try {
+                await addDoc(collection(db, 'messages'), {
+                    text: messageText,
+                    uid: currentUser.uid,
+                    email: currentUser.email,
+                    timestamp: serverTimestamp(),
+                });
+                console.log('Message envoyé avec succès!');
+                messageInput.value = '';
+            } catch (error) {
+                console.error('Erreur lors de l\'envoi du message:', error);
+            }
+        } else {
+            alert('Veuillez écrire un message.');
+        }
+    } else {
+        alert('Veuillez vous connecter pour envoyer un message.');
+    }
+});
+
+
+
+
 

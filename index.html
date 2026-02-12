@@ -18,7 +18,7 @@
 </head>
 <body>
 
-    <h1>Authentification Firebase</h1>
+    <h1>Authentification</h1>
 
     <div id="authForms" class="auth-forms">
         <h2>Inscription</h2>
@@ -36,8 +36,13 @@
 
     <div id="loggedInContent" class="logged-in-content">
         <h2>Bienvenue <span id="userEmailDisplay"></span> !</h2>
-        <p>Ceci est le contenu visible uniquement par les utilisateurs connectés.</p>
         <button id="logoutButton">Se déconnecter</button>
+
+        <form id="message-form">
+            <input type="text" id="message-input" placeholder="Votre message..." />
+            <button type="submit">Envoyer</button>
+        </form>
+
     </div>
 
     <script type="module" src="app.js"></script>
