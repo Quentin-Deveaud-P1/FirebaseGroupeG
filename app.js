@@ -49,7 +49,23 @@ signupButton.addEventListener('click', () => {
                 signupPasswordInput.value = '';
             })
             .catch((error) => {
-                signupErrorDiv.textContent = `Erreur lors de l'inscription : Email ou mot de passe invalide`;
+                switch (error.code) {
+                    case 'auth/weak-password':
+                        signupErrorDiv.textContent = `Erreur lors de l'inscription : Mot de passe invalide (au moins 6 caractères)`;
+                        console.error("Mot de passe invalide.");
+                        break;
+                    case 'auth/invalid-email':
+                        signupErrorDiv.textContent = `Erreur lors de l'inscription : Email invalide`;
+                        console.error("Email invalide.");
+                        break;
+                    case 'auth/email-already-in-use':
+                        signupErrorDiv.textContent = `Erreur lors de l'inscription : Email déjà utilisé`;
+                        console.error("Email déjà utilisé.");
+                        break;
+                    default:
+                        signupErrorDiv.textContent = `Erreur lors de l'inscription : Email ou mot de passe invalide`;
+                        console.error(`Une erreur inattendue est survenue: ${error.message}`);
+                }
             });
     } else {
         signupErrorDiv.textContent = "Veuillez entrer un email et un mot de passe.";
@@ -75,7 +91,15 @@ loginButton.addEventListener('click', () => {
                 loginPasswordInput.value = '';
             })
             .catch((error) => {
-                loginErrorDiv.textContent = `Erreur lors de l'authentification : identifiant inconnu`;
+                switch (error.code) {
+                    case 'auth/invalid-credential':
+                        loginErrorDiv.textContent = `Erreur lors de l'authentification : Email ou mot de passe inconnu`;
+                        console.error("Indentifiant inexistant.");
+                        break;
+                    default:
+                        loginErrorDiv.textContent = `Une erreur inattendue est survenue: ${error.message}`;
+                        console.error(`Une erreur inattendue est survenue: ${error.message}`);
+                }
             });
     } else {
         loginErrorDiv.textContent = "Veuillez entrer un email et un mot de passe.";
