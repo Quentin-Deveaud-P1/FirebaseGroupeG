@@ -161,6 +161,7 @@ function listenForMessages() {
             const messageElement = document.createElement('div');
             messageElement.classList.add('message');
 
+
             let displayTime = '';
             if (message.timestamp) {
                 if (typeof message.timestamp.toDate === 'function') {
